@@ -1,12 +1,18 @@
 # RaspberryPi5-Setup
 
-# Download rpi-imager
-# Choose your device, use Raspberry Pi OS Lite 64-bit if your device supports 64-bits.
-Windows: https://downloads.raspberrypi.org/imager/imager_latest.exe
-Linux package: sudo apt install rpi-imager
-Linux flatpak: https://flathub.org/apps/org.raspberrypi.rpi-imager
+### 1. Download rpi-imager
+- For the device choose RaspberryPi5<br>
+- For the OS, go to "Raspberry Pi OS (other)" and choose Raspberry Pi OS Lite 64-bit.<br>
 
-# Format SDCard with rpi-imager and set up SSH login in the options
+#### Links:
+- [Windows Installer](https://downloads.raspberrypi.org/imager/imager_latest.exe)<br>
+- [macOS Package](https://downloads.raspberrypi.org/imager/imager_latest.dmg)<br>
+- [Linux Ubuntu package](https://downloads.raspberrypi.org/imager/imager_latest_amd64.deb)<br>
+- [Linux flatpak](https://flathub.org/apps/org.raspberrypi.rpi-imager)<br>
+
+2. ### Format SDCard with rpi-imager
+After choosing the device + OS + storage, go to Edit Settings
+
 # After the format is done, insert the SDCard in the Pi, connect the Pi with an ethernet cable and power it on
 # Go to your router, find the RPi mac adress and allocate a fixed IP to it
 # To find your RPi Mac Address lets list your network interfaces
