@@ -10,58 +10,61 @@
 - [Linux Ubuntu package](https://downloads.raspberrypi.org/imager/imager_latest_amd64.deb)<br>
 - [Linux flatpak](https://flathub.org/apps/org.raspberrypi.rpi-imager)<br>
 
-2. ### Format SDCard with rpi-imager
-After choosing the device + OS + storage, go to Edit Settings
+### 2. Format SDCard with rpi-imager
+- Choose the device + OS + storage
+- Set up SSH login in the imager
 
-# After the format is done, insert the SDCard in the Pi, connect the Pi with an ethernet cable and power it on
-# Go to your router, find the RPi mac adress and allocate a fixed IP to it
-# To find your RPi Mac Address lets list your network interfaces
-ip link show
+### 3. After formatting
+- Insert the SDCard in the Pi, connect the Pi with an ethernet cable and power it on
+- Find your RPi Mac address using `ip link show`
+- Go to your router page, find the RPi mac adress and allocate a fixed IP to it (for ex 192.168.1.5)
 
-# Now assign a fixed IP to the RPi. Reboot the Rpi after you're done to get your new IP
-
-# Login with ssh
-ssh username@RPiIPHere
-
-# Update system and reboot
+### 4. Login with SSH
+```
+ssh username@fixedIPhere
+```
+### 5. Update system and reboot
+```
 sudo apt update -y && sudo apt upgrade -y && sudo reboot
+```
+### 6. Enable asking for sudo password
+- Edit the following file with `sudo nano /etc/sudoers.d/010_pi-nopasswd`
+- Change `"yourusername ALL=(ALL) NOPASSWD: ALL"` to `"yourusername ALL=(ALL) PASSWD: ALL"`
+- Mind the spaces and don't change anything else, exit and save with CTRL+X to leave and Y to confirm
 
-# By default security in Raspbian is a bit lax.
+### 7. Change default openssh port for increased security
+- Edit the following file with `sudo nano /etc/ssh/sshd_config`
+- Uncomment Port 22 and change it to your liking
 
-# Enable asking for sudo password
-# Edit the following file and change "yourusername ALL=(ALL) NOPASSWD: ALL" to "yourusername ALL=(ALL) PASSWD: ALL"
-# Remove only the NO, make sure you don't change anything else, mind the spaces, exit and save (CTRL+X to leave and Y to confirm)
-sudo nano /etc/sudoers.d/010_pi-nopasswd
-
-# Change default openssh port in /etc/ssh/sshd_config
-# Uncomment Port 22 and change it to something else.
-sudo nano /etc/ssh/sshd_config
-
-# Reboot
+### 8. Reboot to apply your changes
+```
 sudo reboot
-
-# Install uncomplicated firewall
+```
+### 9. Install uncomplicated firewall
+```
 sudo apt-get install ufw
+```
+### 10. Add the SSH port you chose earlier to UFW
+```
+sudo ufw allow SSHPortHere/tcp
+```
+### 11. Limit the ssh port to not allow six or more connections within 30 seconds.
+```
+sudo ufw limit SSHPortHere/tcp
+```
+### 12. Extra commands that might be useful later
+- Check ports being currently used `sudo ss -tupln`
+- Check which service is using which portnumber `sudo lsof -i :PORT`
 
-# Check ports being currently used
-sudo ss -tupln
+### 13. Make the RPi unpingable. 
+- Edit the following file `sudo nano /etc/ufw/before.rules`
+- In `"# ok icmp codes for INPUT"` add a new line below it with `"-A ufw-before-input -p icmp --icmp-type echo-request -j DROP"`
 
-# Check which service is using which portnumber
-sudo lsof -i :PORT
-
-# Add the SSH port you chose earlier to UFW
-sudo ufw allow SSHPORT/tcp
-
-# Limit the ssh port to not allow six or more connections within 30 seconds.
-sudo ufw limit SSHPORT/tcp
-
-# Let's make the RPi unpingable. 
-sudo nano /etc/ufw/before.rules
-# In "# ok icmp codes for INPUT" add a new line below it and write this "-A ufw-before-input -p icmp --icmp-type echo-request -j DROP"
-
-# Restart RPi5 using sudo reboot and SSH into it using:
-ssh username@RPiIPHere -p SSHPORT
-
+### 14. Restart RPi5 and SSH into it using the newly defined port
+```
+sudo reboot
+ssh username@RPiIPHere -p SSHPortHere
+```
 # Clear the annoying motd. First own the file for your user.
 sudo chown -R $USER:$USER /etc/motd
 
