@@ -1,4 +1,6 @@
-# RaspberryPi5-Setup
+# WIP
+
+## RaspberryPi5-Setup
 
 ### 1. Download rpi-imager
 - For the device choose RaspberryPi5<br>
@@ -65,24 +67,13 @@ sudo ufw limit SSHPortHere/tcp
 sudo reboot
 ssh username@RPiIPHere -p SSHPortHere
 ```
-# Clear the annoying motd. First own the file for your user.
-sudo chown -R $USER:$USER /etc/motd
-
-# Edit .bashrc
-nano ~/.bashrc
-
-# Add the following to always clear motd on login and make it persistent after system upgrades
-echo -n > /etc/motd
-
-# Give support for other terminals, also add this in .bashrc
-export TERM=xterm
-
-# Use CTRL+X and Y to exit and save changes
-# Load bashrc the updated bashrc in the system
-source ~/.bashrc
-
-# go to http://RPiIP:DOCKGEPORT
-# Create your admin account
+### 15. Remove the motd for the RPi and add support for different terminals
+- Own the motd file with `sudo chown -R $USER:$USER /etc/motd`
+- Edit the motd with `nano ~/.bashrc`
+- Always clear motd on login and make it persistent after system upgrades `echo -n > /etc/motd`
+- Add support for kitty terminal `export TERM=xterm`
+- Exit and save changes with CTRL+X then Y
+- Reload bashrc with `source ~/.bashrc`
 
 # Fix constant errors because 64 bits it too new and packages complain about architecture
 # These error messages and "expected kernel" comes from the needrestart package, this package has several modules
