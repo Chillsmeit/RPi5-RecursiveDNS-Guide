@@ -50,7 +50,7 @@ sudo apt-get install ufw
 ```
 sudo ufw allow SSHPortHere/tcp
 ```
-### 11. Limit the ssh port to not allow six or more connections within 30 seconds.
+### 11. Dissalow  six or more SSH connections within 30 seconds
 ```
 sudo ufw limit SSHPortHere/tcp
 ```
