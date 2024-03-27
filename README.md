@@ -32,7 +32,7 @@ sudo apt update -y && sudo apt upgrade -y && sudo reboot
 ### 6. Enable asking for sudo password
 - Edit the following file with `sudo nano /etc/sudoers.d/010_pi-nopasswd`
 - Change `"yourusername ALL=(ALL) NOPASSWD: ALL"` to `"yourusername ALL=(ALL) PASSWD: ALL"`
-- Mind the spaces and don't change anything else, exit and save with CTRL+X to leave and Y to confirm
+- Mind the spaces and don't change anything else, exit and save with CTRL+X then Y
 
 ### 7. Change default openssh port for increased security
 - Edit the following file with `sudo nano /etc/ssh/sshd_config`
@@ -48,11 +48,11 @@ sudo apt-get install ufw
 ```
 ### 10. Add the SSH port you chose earlier to UFW
 ```
-sudo ufw allow SSHPortHere/tcp
+sudo ufw allow SSHPort/tcp
 ```
 ### 11. Dissalow  six or more SSH connections within 30 seconds
 ```
-sudo ufw limit SSHPortHere/tcp
+sudo ufw limit SSHPort/tcp
 ```
 ### 12. Extra commands that might be useful later
 - Check ports being currently used `sudo ss -tupln`
