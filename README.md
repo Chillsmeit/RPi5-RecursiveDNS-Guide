@@ -87,16 +87,14 @@ sudo sed -i 's/#\$nrconf{ucodehints} = 0;/$nrconf{ucodehints} = 0;/' /etc/needre
 - Edit this file with `sudo nano /boot/config.txt`
 - Change this line `dtoverlay=disable-wifi`
 
-### 18. Install Pi-Hole and use Google or Cloudflare DNS for now
-```
-curl -sSL https://install.pi-hole.net | bash
-```
-### 19. Reset PiHole Password
-pihole -a -p
+### 18. Install Pi-Hole
+- Install Pi-Hole with `curl -sSL https://install.pi-hole.net | bash` (choose Google or Cloudflare DNS for now)
+- Reset PiHole Password `pihole -a -p`
 
-### 20. Install Unbound (recursive DNS)
+### 19. Install Unbound (recursive DNS)
+```
 sudo apt-get install unbound -y
-
+```
 ### 21. Paste the default configuration found in https://docs.pi-hole.net/guides/dns/unbound/
 sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
 
