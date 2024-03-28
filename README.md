@@ -1,6 +1,6 @@
 # WIP
 
-## RaspberryPi5-Setup
+## RPi5-RecursiveDNS-Guide and security practices
 
 ### 1. Download rpi-imager
 - For the device choose RaspberryPi5<br>
