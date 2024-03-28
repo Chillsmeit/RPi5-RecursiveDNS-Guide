@@ -91,37 +91,37 @@ sudo sed -i 's/#\$nrconf{ucodehints} = 0;/$nrconf{ucodehints} = 0;/' /etc/needre
 - Install Pi-Hole with `curl -sSL https://install.pi-hole.net | bash` (choose Google or Cloudflare DNS for now)
 - Reset PiHole Password `pihole -a -p`
 
-### 19. Install Unbound (recursive DNS)
-```
-sudo apt-get install unbound -y
-```
-### 21. Paste the default configuration found in https://docs.pi-hole.net/guides/dns/unbound/
-sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
+### 19. Install & Configure Unbound (recursive DNS)
+- Install Unbound with `sudo apt-get install unbound -y`
+- Copy the config found [here](https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound)
+- Paste it into here `sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf`
 
-# Disable the following service because it can cause issues in Debian
+### 20. Disable the following Unbound service because it can cause issues in Debian
+```
 sudo systemctl disable --now unbound-resolvconf.service
 sudo sed -Ei 's/^unbound_conf=/#unbound_conf=/' /etc/resolvconf.conf
 sudo rm /etc/unbound/unbound.conf.d/resolvconf_resolvers.conf
+```
 
-# If you want to make PiHole your DHCP server. List your connections:
-nmcli connection show
-
-# Edit your ethernet connection
-sudo nmcli connection edit "Wired connection 1"
-
-# Now set the parameters according to your internet
+### 21. If you want to make PiHole your DHCP server
+- List your connections with `nmcli connection show`
+- Edit your ethernet connection `sudo nmcli connection edit "Wired connection 1"` in my case
+- Now set the parameters according to your connection:
+```
 set ipv4.method manual
 set ipv4.addresses RPiIP/your_subnet
 set ipv4.gateway GATEWAYIP
 set ipv4.dns 127.0.0.1
 save persistent
 quit
-
-# If you fucked it up, reset it with
+```
+- To revert any changes:
+```
 sudo nmcli connection edit "Wired connection 1"
 reset
 save persistent
 quit
+```
 
 # Open your router page
 # Open Pihole interface in the settings->DHCP tab
