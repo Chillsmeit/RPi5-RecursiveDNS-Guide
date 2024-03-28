@@ -75,31 +75,29 @@ ssh username@RPiIPHere -p SSHPortHere
 - Exit and save changes with CTRL+X then Y
 - Reload bashrc with `source ~/.bashrc`
 
-# Fix constant errors because 64 bits it too new and packages complain about architecture
-# These error messages and "expected kernel" comes from the needrestart package, this package has several modules
-# The processor microcode module only supports AMD and Intel but not aarch64 (64bits ARM)
-# You can remove it entirely with:
-sudo apt-get purge needrestart
-
-# Or you can change this value:
+### 16. If there's erros messages like "expected kernel" etc.
+- The reason is because 64 bits it too new in Raspbian and the packages complain about architecture
+- The processor microcode module only supports AMD and Intel but not aarch64 (64bits ARM)
+- You can "fix" this by removing the needrestart package `sudo apt-get purge needrestart`
+- Or you can change this value:
+```
 sudo sed -i 's/#\$nrconf{ucodehints} = 0;/$nrconf{ucodehints} = 0;/' /etc/needrestart/needrestart.conf
+```
+### 17. Disable onboard Wifi if you're using ethernet:
+- Edit this file with `sudo nano /boot/config.txt`
+- Change this line `dtoverlay=disable-wifi`
 
-# Disable onboard Wifi
-sudo nano /boot/config.txt
-
-# Add this line
-dtoverlay=disable-wifi
-
-# Install Pi-Hole and use google or cloudflare DNS for now
+### 18. Install Pi-Hole and use Google or Cloudflare DNS for now
+```
 curl -sSL https://install.pi-hole.net | bash
-
-# Reset PiHole Password
+```
+### 19. Reset PiHole Password
 pihole -a -p
 
-# Install Unbound
+### 20. Install Unbound (recursive DNS)
 sudo apt-get install unbound -y
 
-# Paste the default configuration found in https://docs.pi-hole.net/guides/dns/unbound/
+### 21. Paste the default configuration found in https://docs.pi-hole.net/guides/dns/unbound/
 sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
 
 # Disable the following service because it can cause issues in Debian
