@@ -91,7 +91,7 @@ sudo sed -i 's/#\$nrconf{ucodehints} = 0;/$nrconf{ucodehints} = 0;/' /etc/needre
 - Install Pi-Hole with `curl -sSL https://install.pi-hole.net | bash` (choose Google or Cloudflare DNS for now)
 - Reset PiHole Password `pihole -a -p`
 
-### 19. Install & Configure Unbound (recursive DNS)
+### 19. Install Unbound (recursive DNS)
 - Install Unbound with `sudo apt-get install unbound -y`
 - Copy the config found [here](https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound)
 - Paste it into here `sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf`
@@ -103,14 +103,22 @@ sudo sed -Ei 's/^unbound_conf=/#unbound_conf=/' /etc/resolvconf.conf
 sudo rm /etc/unbound/unbound.conf.d/resolvconf_resolvers.conf
 ```
 
-### 21. If you want to make PiHole your DHCP server
-- List your connections with `nmcli connection show`
+### 21. If you want to make PiHole your DHCP server (optional)
+- Open PiHole interface -> Go to the settings tab and then DHCP tab
+- Enable "DHCP server enabled"
+- Choose an IP range, let's use 192.168.1.21 to 192.168.1.151
+- For Router (gateway) IP address put your router IP address. 192.168.1.1
+- Open your router page
+- Turn off the DHCP server in your router and change primary DNS and secondary DNS to your RPi . (don't forget to save)
+
+### 22. Configure Unbound (recursive DNS)
+- List your connections on RPi with `nmcli connection show`
 - Edit your ethernet connection `sudo nmcli connection edit "Wired connection 1"` in my case
 - Now set the parameters according to your connection:
 ```
 set ipv4.method manual
 set ipv4.addresses RPiIP/your_subnet
-set ipv4.gateway GATEWAYIP
+set ipv4.gateway RouterIP
 set ipv4.dns 127.0.0.1
 save persistent
 quit
@@ -122,43 +130,35 @@ reset
 save persistent
 quit
 ```
+- Go to PiHole Interface -> Settings -> DNS
+- Tick Custom 1 (IPv4) and write `127.0.0.1#5335`
 
-# Open your router page
-# Open Pihole interface in the settings->DHCP tab
-# Turn off the DHCP server in your router and change primary DNS and secondary DNS to your RPi DNS. (don't forget to save)
-# On Pihole DHCP tab, enable "DHCP server enabled"
-# Choose an IP range, let's use 192.168.1.21 to 192.168.1.151
-# For Router (gateway) IP address put your router IP address. 192.168.1.1
-# Go to Settings -> DNS
-# Tick Custom 1 (IPv4) and write "127.0.0.1#5335"
-# Shuwdown your router and your RaspberryPi. Turn the router on and wait for a bit for it to startup, only then turn on the RPi
-# Check if unbound is working
-dig pi-hole.net @127.0.0.1 -p 5335
+### 23. Check if unbound is working
+- Shuwdown your router and your RaspberryPi.
+- Turn your router on first.
+- Turn on the RPi
+- Use the following command to check if unbound is working `dig pi-hole.net @127.0.0.1 -p 5335`
 
-# Change PiHole from port 80 to something else
+### 24. Change PiHole WebInterface from port 80 to something else
+```
 sudo nano /etc/lighttpd/conf-enabled/external.conf
+```
+- Add the following: `server.port := YOURPORTHERE`
+- Restart lighttpd `sudo service lighttpd restart`
 
-# Add the following:
-server.port := 22410
-
-# Restart lighttpd
-sudo service lighttpd restart
-
-# Access admin interface with http://RPiIP:PORT/admin
-
-# Enable Ports used by PiHole and Unbound
+### 25. Enable Ports used by PiHole and Unbound in UFW (optional)
+```
 sudo ufw allow 53/tcp # DNS Resolution
 sudo ufw allow 53/udp # DNS Resolution
 sudo ufw allow 67/tcp # only needed if you want to use PiHole as DNS
 sudo ufw allow 67/udp # only needed if you want to use PiHole as DNS
 sudo ufw allow 443/tcp # for SSL/TLS certification with nginx
 sudo ufw allow 5335/tcp # DNS over TLS Communication
-sudo ufw allow 24830/tcp # Port you chose for the admin interface
+sudo ufw allow YOURPORT/tcp # Port you chose for the admin interface
+```
+- Enable the firewall with `sudo ufw enable`
 
-# Enable the firewall
-sudo ufw enable
-
-# Install Neofetch
+### 26. Install Neofetch
 sudo apt install neofetch -y
 
 # Enable temperatures in neofetch. Run this in terminal
@@ -237,26 +237,3 @@ docker compose up -d
 
 # Go to your browser and enter http://RPiIP:PORTAINERPORT
 # Choose a name for your user and password
-
-# Create dockge folder
-mkdir -p "~/Docker/dockge"
-
-# cd into folder and create compose file
-cd ~/Docker/dockge && nano docker-compose.yml
-
-# Paste the following:
-version: "3.8"
-services:
-  dockge:
-    image: louislam/dockge:1
-    restart: unless-stopped
-    ports:
-      # Host Port : Container Port
-      - PORT:5001
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data:/app/data
-      - /home/YOURUSERNAME/Docker:/home/YOURUSERNAME/Docker
-    environment:
-      # Tell Dockge where is your stacks directory
-      - DOCKGE_STACKS_DIR=/home/YOURUSERNAME/Docker
