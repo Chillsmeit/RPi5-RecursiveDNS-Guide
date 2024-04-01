@@ -18,7 +18,10 @@
 
 ### 3. After formatting
 - Insert the SDCard in the Pi, connect the Pi with an ethernet cable and power it on
-- Find your RPi Mac address using `ip link show`
+- Find your RPi Mac address with:
+```
+ip link show
+```
 - Go to your router page, find the RPi mac adress and allocate a fixed IP to it (for ex 192.168.1.5)
 
 ### 4. Login with SSH
@@ -30,12 +33,18 @@ ssh username@fixedIPhere
 sudo apt update -y && sudo apt upgrade -y && sudo reboot
 ```
 ### 6. Enable asking for sudo password
-- Edit the following file with `sudo nano /etc/sudoers.d/010_pi-nopasswd`
+- Edit the following file with:
+```
+sudo nano /etc/sudoers.d/010_pi-nopasswd
+```
 - Change `"yourusername ALL=(ALL) NOPASSWD: ALL"` to `"yourusername ALL=(ALL) PASSWD: ALL"`
 - Mind the spaces and don't change anything else, exit and save with CTRL+X then Y
 
 ### 7. Change default openssh port for increased security
-- Edit the following file with `sudo nano /etc/ssh/sshd_config`
+- Edit the following file with:
+```
+sudo nano /etc/ssh/sshd_config
+```
 - Uncomment Port 22 and change it to your liking
 
 ### 8. Reboot to apply your changes
@@ -55,11 +64,18 @@ sudo ufw allow SSHPort/tcp
 sudo ufw limit SSHPort/tcp
 ```
 ### 12. Extra commands that might be useful later
-- Check ports being currently used `sudo ss -tupln`
-- Check which service is using which portnumber `sudo lsof -i :PORT`
-
+- Check ports being currently used with:
+```
+sudo ss -tupln
+```
+- Check which service is using which portnumber with:
+```
+sudo lsof -i :PORT
+```
 ### 13. Make the RPi unpingable. 
-- Edit the following file `sudo nano /etc/ufw/before.rules`
+```
+sudo nano /etc/ufw/before.rules
+```
 - In `"# ok icmp codes for INPUT"` add a new line below it with `"-A ufw-before-input -p icmp --icmp-type echo-request -j DROP"`
 
 ### 14. Restart RPi5 and SSH into it using the newly defined port
@@ -68,33 +84,57 @@ sudo reboot
 ssh username@RPiIPHere -p SSHPortHere
 ```
 ### 15. Remove the motd for the RPi and add support for different terminals
-- Own the motd file with `sudo chown -R $USER:$USER /etc/motd`
-- Edit the motd with `nano ~/.bashrc`
-- Always clear motd on login and make it persistent after system upgrades `echo -n > /etc/motd`
-- Add support for kitty terminal `export TERM=xterm`
+- Own the motd file with:
+```
+sudo chown -R $USER:$USER /etc/motd
+```
+- Edit the motd with:
+```
+nano ~/.bashrc
+```
+- To clear motd on login and make it persistent after system upgrades with add this to .bashrc `echo -n > /etc/motd`
+- To add support for kitty terminal add this too `export TERM=xterm`
 - Exit and save changes with CTRL+X then Y
-- Reload bashrc with `source ~/.bashrc`
+- Reload bashrc with:
+```
+source ~/.bashrc
+```
 
 ### 16. If there's erros messages like "expected kernel" etc.
 - The reason is because 64 bits it too new in Raspbian and the packages complain about architecture
 - The processor microcode module only supports AMD and Intel but not aarch64 (64bits ARM)
-- You can "fix" this by removing the needrestart package `sudo apt-get purge needrestart`
-- Or you can change this value:
+- You can "fix" this by removing the needrestart package with:
+```
+sudo apt-get purge needrestart
+```
+- Or you can change the following value:
 ```
 sudo sed -i 's/#\$nrconf{ucodehints} = 0;/$nrconf{ucodehints} = 0;/' /etc/needrestart/needrestart.conf
 ```
 ### 17. Disable onboard Wifi if you're using ethernet:
-- Edit this file with `sudo nano /boot/config.txt`
-- Change this line `dtoverlay=disable-wifi`
-
+```
+sudo nano /boot/config.txt
+```
+- Change the line `dtoverlay=disable-wifi`
 ### 18. Install Pi-Hole
-- Install Pi-Hole with `curl -sSL https://install.pi-hole.net | bash` (choose Google or Cloudflare DNS for now)
-- Reset PiHole Password `pihole -a -p`
-
+- Install Pi-Hole with (choose Google or Cloudflare DNS for now):
+```
+curl -sSL https://install.pi-hole.net | bash
+```
+- Reset PiHole Password with:
+```
+pihole -a -p
+```
 ### 19. Install Unbound (recursive DNS)
-- Install Unbound with `sudo apt-get install unbound -y`
+- Install Unbound with:
+```
+sudo apt-get install unbound -y
+```
 - Copy the config found [here](https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound)
-- Paste it into here `sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf`
+- Paste it into here:
+```
+sudo nano /etc/unbound/unbound.conf.d/pi-hole.conf
+```
 
 ### 20. Disable the following Unbound service because it can cause issues in Debian
 ```
@@ -156,21 +196,28 @@ sudo ufw allow 443/tcp # for SSL/TLS certification with nginx
 sudo ufw allow 5335/tcp # DNS over TLS Communication
 sudo ufw allow YOURPORT/tcp # Port you chose for the admin interface
 ```
-- Enable the firewall with `sudo ufw enable`
+- Enable the firewall with:
+```
+sudo ufw enable
+```
 
-### 26. Install Neofetch
+### 26. Install Neofetch & configure neofetch
+```
 sudo apt install neofetch -y
-
-# Enable temperatures in neofetch. Run this in terminal
+```
+- Enable temperatures in neofetch with:
+```
 sed -i 's/cpu_temp="off"/cpu_temp="C"/' ~/.config/neofetch/config.conf
-
-# Fix neofetch regex to support RPi sensors:
+```
+- Fix neofetch regex to support RPi sensors:
+```
 sudo cp "/usr/bin/neofetch" "/usr/bin/neofetch.backup" && sudo sed -i "s/(coretemp|fam15h_power|k10temp)/(cpu_thermal|coretemp|fam15h_power|k10temp)/g" "/usr/bin/neofetch"
-
-# Make neofetch show available disk space
+```
+- Make neofetch show available disk space:
+```
 sed -i 's/# info "Disk" disk/info "Disk" disk/' ~/.config/neofetch/config.conf
-
-# Fix neofetch displaying Debian ASCII Art
+```
+### 27. Make neofetch display RaspbianOS ASCII Art instead of Debian
 sed -i 's/ascii_distro="auto"/ascii_distro="Raspbian"/' ~/.config/neofetch/config.conf
 
 # run neofetch or add it to bashrc and load it
