@@ -217,9 +217,10 @@ sudo cp "/usr/bin/neofetch" "/usr/bin/neofetch.backup" && sudo sed -i "s/(corete
 ```
 sed -i 's/# info "Disk" disk/info "Disk" disk/' ~/.config/neofetch/config.conf
 ```
-### 27. Make neofetch display RaspbianOS ASCII Art instead of Debian
+- Make neofetch display RaspbianOS ASCII Art instead of Debian with:
+```
 sed -i 's/ascii_distro="auto"/ascii_distro="Raspbian"/' ~/.config/neofetch/config.conf
-
+```
 # run neofetch or add it to bashrc and load it
 neofetch
 
