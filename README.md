@@ -267,6 +267,10 @@ curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"
 ```
 curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"tag_name": "[^"]*"' | sed 's/"tag_name": "\(.*\)"/\1/' | xargs -I{} curl -LO https://github.com/docker/compose/releases/download/{}/docker-compose-linux-armv7
 ```
+- For a 32 bits ARMv6 RPi use this:
+```
+curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"tag_name": "[^"]*"' | sed 's/"tag_name": "\(.*\)"/\1/' | xargs -I{} curl -LO https://github.com/docker/compose/releases/download/{}/docker-compose-linux-armv6
+```
 - Make the script executable with:
 ```
 chmod +x ~/.docker/cli-plugins/docker-compose
