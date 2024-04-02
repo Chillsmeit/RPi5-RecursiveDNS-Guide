@@ -22,11 +22,11 @@
 ```
 ip link show
 ```
-- Go to your router page, find the RPi mac adress and allocate a fixed IP to it (for ex 192.168.1.5)
+- Go to your router page, find the RPi mac adress and allocate a static IP to it (for ex 192.168.1.5)
 
 ### 4. Login with SSH
 ```
-ssh username@fixedIPhere
+ssh username@staticIPhere
 ```
 ### 5. Update system and reboot
 ```
