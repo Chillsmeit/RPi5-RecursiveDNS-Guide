@@ -101,7 +101,7 @@ source ~/.bashrc
 ```
 
 ### 16. If there's erros messages like "expected kernel" etc.
-- The reason is because 64 bits it too new in Raspbian and the packages complain about architecture
+- At the time of writting, some Debian 12 (bookworm) packages complain about the architecture
 - The processor microcode module only supports AMD and Intel but not aarch64 (64bits ARM)
 - You can "fix" this by removing the needrestart package with:
 ```
@@ -259,28 +259,29 @@ docker-compose --version
 ```
 mkdir -p ~/.docker/cli-plugins/
 ```
-- For 64 bits use this (RPi5)
+- For a 64 bits RPi use this:
 ```
 curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-aarch64 -o ~/.docker/cli-plugins/docker-compose
 ```
-- For 32 bits use this (Other Raspberry Pis)
+- For a 32 bits RPi use this:
 ```
 curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-armv7 -o ~/.docker/cli-plugins/docker-compose
 ```
-# Make the script executable
+- Make the script executable with:
+```
 chmod +x ~/.docker/cli-plugins/docker-compose
-
-# Install Portainer-CE.
-# Create the directories
-mkdir -p "~/Docker/portainer-ce"
-
-# Cd into portainer folder:
-cd Docker/portainer-ce
-
-# Create the following file
+```
+### 31. Install Portainer-CE (Community Edition)
+- Create the directories and cd into them:
+```
+mkdir -p "~/Docker/portainer-ce" && cd "~/Docker/portainer-ce"
+```
+- Create the following file
+```
 nano docker-compose.yml
-
-# Past the following inside, exit and save
+```
+- Paste the following inside (Change the PORT into a port you want), exit and save:
+```
 version: '3.9'
 services:
     portainer-ce:
@@ -295,9 +296,10 @@ services:
         restart: always
 volumes:
     portainer_data:
-
-# After exiting, do the following command:
+```
+- After exiting, do the following command:
+```
 docker compose up -d
-
-# Go to your browser and enter http://RPiIP:PORTAINERPORT
-# Choose a name for your user and password
+```
+- Go to your browser and enter http://RPiIP:PORTAINERPORT
+- Choose a name for your user and password
