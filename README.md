@@ -1,5 +1,3 @@
-# WIP
-
 ## RPi5-RecursiveDNS-Guide and security practices
 
 ### 1. Download rpi-imager
