@@ -184,7 +184,10 @@ quit
 sudo nano /etc/lighttpd/conf-enabled/external.conf
 ```
 - Add the following: `server.port := YOURPORTHERE`
-- Restart lighttpd `sudo service lighttpd restart`
+- Restart lighttpd with:
+```
+sudo service lighttpd restart
+```
 
 ### 25. Enable Ports used by PiHole and Unbound in UFW (optional)
 ```
