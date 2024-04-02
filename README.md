@@ -259,13 +259,13 @@ docker-compose --version
 ```
 mkdir -p ~/.docker/cli-plugins/
 ```
-- For a 64 bits RPi use this:
+- For a 64 bits ARM RPi use this:
 ```
-curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-aarch64 -o ~/.docker/cli-plugins/docker-compose
+curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"tag_name": "[^"]*"' | sed 's/"tag_name": "\(.*\)"/\1/' | xargs -I{} curl -LO https://github.com/docker/compose/releases/download/{}/docker-compose-linux-aarch64
 ```
-- For a 32 bits RPi use this:
+- For a 32 bits ARMv7 RPi use this:
 ```
-curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-armv7 -o ~/.docker/cli-plugins/docker-compose
+curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"tag_name": "[^"]*"' | sed 's/"tag_name": "\(.*\)"/\1/' | xargs -I{} curl -LO https://github.com/docker/compose/releases/download/{}/docker-compose-linux-armv7
 ```
 - Make the script executable with:
 ```
