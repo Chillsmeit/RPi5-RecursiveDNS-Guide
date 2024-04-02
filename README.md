@@ -276,7 +276,7 @@ curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -o '"
 ```
 chmod +x ~/.docker/cli-plugins/docker-compose
 ```
-### 31. Install Portainer-CE (Community Edition)
+### 31. Install Portainer-CE (Optional)
 - Create the directories and cd into them:
 ```
 mkdir -p "~/Docker/portainer-ce" && cd "~/Docker/portainer-ce"
