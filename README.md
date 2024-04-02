@@ -201,7 +201,7 @@ sudo ufw allow YOURPORT/tcp # Port you chose for the admin interface
 sudo ufw enable
 ```
 
-### 26. Install Neofetch & configure neofetch
+### 26. Install Neofetch & configure neofetch (Optional)
 ```
 sudo apt install neofetch -y
 ```
@@ -221,36 +221,52 @@ sed -i 's/# info "Disk" disk/info "Disk" disk/' ~/.config/neofetch/config.conf
 ```
 sed -i 's/ascii_distro="auto"/ascii_distro="Raspbian"/' ~/.config/neofetch/config.conf
 ```
-# run neofetch or add it to bashrc and load it
-neofetch
-
-# Install tldr and nala
+### 27. Add neofetch it to bashrc (Optional)
+- Open .bashrc with:
+```
+nano ~/.bashrc
+```
+- Add this line in the end of the file, save and exit `neofetch`
+- Reload bashrc with:
+```
+source ~/.bashrc
+```
+### 28. Install tldr, nala and neovim (Optional)
+```
 sudo apt install nala -y && sudo apt install tldr -y && sudo apt install neovim -y
-
-# Install Docker and Docker-Compose
-sudo apt install docker -y
-sudo apt install docker-compose -y
-
-# Add User to the docker group
+```
+### 29. Install & configure Docker and Docker-Compose
+```
+sudo apt install docker -y && sudo apt install docker-compose -y
+```
+- Add your current user to the docker group with:
+```
 sudo usermod -aG docker "$USER"
-
-# Enable docker autostart
+```
+- Enable docker autostart
+```
 sudo systemctl enable docker
-
-# Reboot so that your user is added to the Docker group
-
-# Check if you have docker-compose v2 by using:
+```
+- Reboot your device so that your user is added to the Docker group
+```
+sudo reboot
+```
+- Check if you have docker-compose v2 by using:
+```
 docker-compose --version
-
-# Update docker-compose to V2 directly from Github if you have v1
+```
+- Update docker-compose to V2 directly from Github if you have v1
+```
 mkdir -p ~/.docker/cli-plugins/
-
-# For 64 bits use this:
+```
+- For 64 bits use this (RPi5)
+```
 curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-aarch64 -o ~/.docker/cli-plugins/docker-compose
-
-# For 32 bits use this:
+```
+- For 32 bits use this (Other Raspberry Pis)
+```
 curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-armv7 -o ~/.docker/cli-plugins/docker-compose
-
+```
 # Make the script executable
 chmod +x ~/.docker/cli-plugins/docker-compose
 
